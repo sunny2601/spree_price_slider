@@ -7,8 +7,8 @@ module SpreePriceSlider
                          .where(spree_variants: {product_id: product_ids})
                          .where(currency: Spree::Config[:currency])
 
-    minimum = prices.minimum(:amount).floor.to_i
-    maximum = prices.maximum(:amount).ceil.to_i
+    minimum = (prices.minimum(:amount) || 0).floor.to_i
+    maximum = (prices.maximum(:amount) || 0).ceil.to_i
 
     {
       name:    Spree.t(:price_slider),

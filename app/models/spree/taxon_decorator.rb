@@ -7,7 +7,7 @@ module Spree
 
       fs = fs.reject{|f| f[:scope] == :price_range_any}
 
-      fs << SpreePriceSlider.price_slider_filter(self.product_ids) if SpreePriceSlider.respond_to?(:price_slider_filter)
+      fs << SpreePriceSlider.price_slider_filter(self.product_ids) if SpreePriceSlider.respond_to?(:price_slider_filter) and self.products.any?
 
       fs
     end
