@@ -1,0 +1,37 @@
+<!-- replace_contents "erb[silent]:contains('filters.each do |filter|')" closing_selector "erb[silent]:contains('end')" -->
+
+<% if filter[:scope] == :price_slider %>
+  <div class="navigation" data-hook="navigation">
+    <h4 class="filter-title"> <%= filter[:name] %> </h4>
+    <input type="text"
+           name='search[price_slider]'
+           class="slider-filter form-control"
+           value=<%= params[:search] && params[:search][:price_slider] ? params[:search][:price_slider] : "#{filter[:minimum]}, #{filter[:maximum]}" %>
+           data-slider-min=<%= filter[:minimum] %>
+           data-slider-max=<%= filter[:maximum] %>
+           data-slider-step=<%= filter[:step] %>
+           data-slider-value=<%= params[:search] && params[:search][:price_slider] ? params[:search][:price_slider].split(',') : [filter[:minimum], filter[:maximum]] %> />
+    <p>
+      <span id="price_slider_legend"></span>
+    </p>
+  </div>
+<% else %>
+  <% labels = filter[:labels] || filter[:conds].map {|m,c| [m,m]} %>
+  <% next if labels.empty? %>
+  <div class="navigation" data-hook="navigation">
+    <h4 class="filter-title"> <%= filter[:name] %> </h4>
+    <ul class="list-group">
+      <% labels.each do |nm,val| %>
+        <% label = "#{filter[:name]}_#{nm}".gsub(/\s+/,'_') %>
+        <li class="list-group-item">
+          <input type="checkbox"
+                 id="<%= label %>"
+                 name="search[<%= filter[:scope].to_s %>][]"
+                 value="<%= val %>"
+                 <%= params[:search] && params[:search][filter[:scope]] && params[:search][filter[:scope]].include?(val.to_s) ? "checked" : "" %> />
+          <label class="nowrap" for="<%= label %>"> <%= nm %> </label>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
